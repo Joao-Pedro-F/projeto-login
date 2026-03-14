@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Criar Conta | Sistema</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    /* Variáveis de Cores */
+    :root {
+      --primary: #4f46e5;
+      --primary-hover: #4338ca;
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --text: #1e293b;
+      --text-secondary: #64748b;
+      --input-border: #e2e8f0;
+    }
+
+    /* Cores do Modo Escuro */
+    [data-theme="dark"] {
+      --bg: #0f172a;
+      --card-bg: #1e293b;
+      --text: #f1f5f9;
+      --text-secondary: #94a3b8;
+      --input-border: #334155;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      color: var(--text);
+      transition: background 0.3s, color 0.3s;
+    }
+
+    /* Botão de Alternar Tema */
+    .theme-toggle {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      cursor: pointer;
+      background: var(--card-bg);
+      border: 1px solid var(--input-border);
+      padding: 10px;
+      border-radius: 50%;
+      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s;
+    }
+
+    .container {
+      background: var(--card-bg);
+      padding: 2.5rem;
+      border-radius: 1rem;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 400px;
+      transition: background 0.3s;
+    }
+
+    h1 { margin-top: 0; font-size: 1.75rem; text-align: center; color: var(--text); }
+    p.subtitle { text-align: center; color: var(--text-secondary); margin-bottom: 2rem; font-size: 0.9rem; }
+
+    .form-group { margin-bottom: 1.25rem; }
+    input {
+      width: 100%; padding: 0.75rem 1rem;
+      border: 1px solid var(--input-border);
+      background: var(--card-bg);
+      color: var(--text);
+      border-radius: 0.5rem;
+      font-size: 1rem;
+      box-sizing: border-box;
+      transition: all 0.2s;
+    }
+
+    input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2); }
+
+    button.btn-submit {
+      width: 100%; padding: 0.75rem;
+      background-color: var(--primary);
+      color: white; border: none; border-radius: 0.5rem;
+      font-size: 1rem; font-weight: 600; cursor: pointer;
+      transition: background 0.3s; margin-top: 1rem;
+    }
+    button.btn-submit:hover { background-color: var(--primary-hover); }
+
+    .footer-link { text-align: center; margin-top: 1.5rem; font-size: 0.875rem; color: var(--text-secondary); }
+    .footer-link a { color: var(--primary); text-decoration: none; font-weight: 600; }
+  </style>
+</head>
+<body>
+
+<button class="theme-toggle" id="themeToggle" title="Alternar Tema">
+  <span id="themeIcon">🌙</span>
+</button>
+
+<div class="container">
+  <h1>Criar Conta</h1>
+  <p class="subtitle">Cadastre-se para começar</p>
+
+  <form id="cadastroForm">
+    <div class="form-group"><input type="text" id="nome" placeholder="Nome" required></div>
+    <div class="form-group"><input type="email" id="email" placeholder="E-mail" required></div>
+    <div class="form-group"><input type="password" id="senha" placeholder="Senha" required></div>
+    <button type="submit" class="btn-submit">Cadastrar</button>
+  </form>
+
+  <div class="footer-link">
+    Já tem uma conta? <a href="/login">Faça login</a>
+  </div>
+</div>
+
+<script>
+  // Lógica do Modo Escuro
+  const themeToggle = document.getElementById('themeToggle');
+  const themeIcon = document.getElementById('themeIcon');
+  const currentTheme = localStorage.getItem('theme') || 'light';
+
+  if (currentTheme === 'dark') {
+    document.documentElement.setAttribute('data-theme', 'dark');
+    themeIcon.innerText = '☀️';
+  }
+
+  themeToggle.addEventListener('click', () => {
+    let theme = document.documentElement.getAttribute('data-theme');
+    if (theme === 'dark') {
+      document.documentElement.setAttribute('data-theme', 'light');
+      localStorage.setItem('theme', 'light');
+      themeIcon.innerText = '🌙';
+    } else {
+      document.documentElement.setAttribute('data-theme', 'dark');
+      localStorage.setItem('theme', 'dark');
+      themeIcon.innerText = '☀️';
+    }
+  });
+
+  // Lógica do Formulário (Original)
+  const form = document.getElementById('cadastroForm');
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const data = {
+      nome: document.getElementById('nome').value,
+      email: document.getElementById('email').value,
+      password: document.getElementById('senha').value
+    };
+    try {
+      const res = await fetch('/register', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(data)
+      });
+      const result = await res.json();
+      alert(result.message || result.error);
+      if(res.status === 201) window.location.href = '/login';
+    } catch(err) { alert('Erro ao conectar.'); }
+  });
+</script>
+</body>
+</html>
