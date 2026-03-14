@@ -1,12 +1,12 @@
-# Ignore arquivos de ambiente e senhas
+#ambiente
 .env
 
-# Ignore arquivos compilados e caches
+#cache
 __pycache__/
 *.pyc
 
-# Ignore pastas do VS Code
+#pastas do VS Code
 .vscode/
 
-# Ignore banco de dados local se você tiver arquivo .db
+#arquivos .db
 *.db
