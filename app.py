@@ -88,7 +88,13 @@ def login():
         if not user:
             return jsonify({"error": "Usuário não encontrado."}), 404
 
-        user_id, nome, user_email, hashed_password = user
+        if isinstance(user, dict):
+            user_id = user["id"]
+            nome = user["nome"]
+            user_email = user["email"]
+            hashed_password = user["password"]
+        else:
+            user_id, nome, user_email, hashed_password = user
         if not bcrypt.check_password_hash(hashed_password, password):
             return jsonify({"error": "Senha incorreta."}), 401
 
