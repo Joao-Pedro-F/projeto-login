@@ -23,7 +23,7 @@ mysql = MySQL(app)
 # Rota inicial de teste
 @app.route("/")
 def home():
-    return "Servidor Flask funcionando!"
+    return render_template("login.html")
 
 #rota cadastro
 @app.route("/cadastro_form")
