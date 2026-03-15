@@ -19,6 +19,10 @@ app.config['MYSQL_PASSWORD'] = os.getenv('MYSQL_PASSWORD')
 app.config['MYSQL_DB'] = os.getenv('MYSQL_DB')
 app.config['MYSQL_PORT'] = int(os.getenv('MYSQL_PORT', 11805))
 
+# Aiven
+app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
+app.config['MYSQL_SSL_MODE'] = 'REQUIRED'
+
 mysql = MySQL(app)
 
 # Rota inicial de teste
